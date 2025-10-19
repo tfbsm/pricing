@@ -1,6 +1,6 @@
 # Time-fractional Black-Scholes model based option pricing
 
-$\textbf{Classical Black–Scholes model}: $
+## Classical Black–Scholes model: 
 
 The price of a European option $V(t, x)$ is the solution of the boundary-value problem:
 
@@ -8,7 +8,7 @@ $$
 \frac{\partial V}{\partial t} + rS \frac{\partial V}{\partial S} + \frac{1}{2} \sigma^2 S^2 \frac{\partial^2 V}{\partial S^2} - rV = 0
 $$
 
-$\textbf{Boundary conditions}$
+### Boundary conditions
   - Terminal condition: $V(T, S) = \max(S - K, 0)$
   - Boundary condition: $V(t, 0) = 0$
 
@@ -18,7 +18,7 @@ $$
 V_0 = e^{-rT}  \mathbb{E} \left[ f(S_T) \right],
 $$
 
-$\textbf{Caputo fractional derivative}: $
+### Caputo fractional derivative: 
 
 For order $\alpha \in (0,1)$ Caputo fractional derivative is defined as:
 
@@ -26,7 +26,7 @@ $$
 \frac{d^{\alpha}f}{dx^{\alpha}} = \frac{1}{\Gamma(1-\alpha)} \int_{0}^{x} \frac{f^{\prime}(t)}{(x-t)^{\alpha}} dt
 $$
 
-### $\textbf{Time-fractional Black–Scholes equation}:$
+## Time-fractional Black–Scholes equation:
 
 The fractional analogue is the boundary-value problem: 
 
@@ -34,12 +34,13 @@ $$
 \frac{\partial^\alpha V}{\partial t^\alpha} + rS \frac{\partial V}{\partial S} + \frac{1}{2} \sigma^2 S^2 \frac{\partial^2 V}{\partial S^2} - rV = 0
 $$
 
+### Boundary conditions
 - Terminal condition: $V(T, S) = \max(S - K, 0)$
 - Boundary condition:
     $V(t, 0) = 0, \, V(t,x) \sim S - Ke^{-r(T-t)} \ \text{as} \ S \to \infty$
 
   
-$\textbf{The Monte Carlo Solution}:$
+### The Monte Carlo Solution:
 
 Using the similar idea with B-S there is an approach to calculate the theoretical price of option under the TFBSM:
 
