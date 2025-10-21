@@ -9,6 +9,7 @@ project(
 set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
+set(CTEST_OUTPUT_ON_FAILURE 1)
 
 if(PROJECT_SOURCE_DIR STREQUAL PROJECT_BINARY_DIR)
     message(
@@ -25,16 +26,16 @@ CPMAddPackage("gh:TheLartians/Format.cmake@1.8.2")
 
 # Project structure
 
-file(GLOB_RECURSE sources CONFIGURE_DEPENDS "${CMAKE_CURRENT_SOURCE_DIR}/src/*.cpp")
+file(GLOB_RECURSE libsources CONFIGURE_DEPENDS "${CMAKE_CURRENT_SOURCE_DIR}/src/libtfbsm/*.cpp")
 
 add_compile_options(-fsanitize=address)
 add_link_options(-fsanitize=address)
 
-add_library(libtfbsm ${sources})
-target_include_directories(libtfbsm PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/include)
+add_library(tfbsm SHARED ${libsources})
+target_include_directories(tfbsm PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/include)
 
 add_executable(test_app src/app/test_app.cpp)
-target_link_libraries(test_app PRIVATE libtfbsm)
+target_link_libraries(test_app PRIVATE tfbsm)
 
 # Tests
 
@@ -48,3 +49,7 @@ FetchContent_Declare(
     GIT_TAG v1.14.0
 )
 FetchContent_MakeAvailable(googletest)
+
+add_executable(test_something tests/test_something.cpp)
+target_link_libraries(test_something PRIVATE tfbsm GTest::gtest_main)
+add_test(NAME test_something COMMAND test_something)

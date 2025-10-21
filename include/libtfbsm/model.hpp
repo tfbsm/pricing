@@ -12,6 +12,7 @@ class Model {
     Model(int test_arg = 123) : test_field(test_arg) {}
 
     void do_something();
+    int getTestField() const noexcept { return test_field; }
 };
 
 }  // namespace tfbsm
