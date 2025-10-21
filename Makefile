@@ -24,5 +24,8 @@ format: configure
 build: configure format
 	cmake --build $(build_path) -- -j $(cores)
 
+test: build
+	CTEST_OUTPUT_ON_FAILURE=1 cmake --build $(build_path) --target test
+
 run-test-app: build
 	@./$(build_path)/test_app

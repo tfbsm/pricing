@@ -72,3 +72,12 @@ $$
 $$
 
 5.  The final option price **V** is the average of all these discounted payoffs across all `N` simulated paths.
+
+## Build and run
+
+Build library and app
+
+```bash
+make clean build
+```
+
