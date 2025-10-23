@@ -13,6 +13,5 @@ void tfbsm::Model::do_something() {
     std::vector<int> v{1, 2, 3};
 
     std::cout << "do something" << std::endl;
-    test([v = std::move(v)](int i) { std::cout << i << " " << v.size(); },
-         test_field);
+    test([v = std::move(v)](int i) { std::cout << i << " " << v.size(); }, test_field);
 }

@@ -1,8 +1,9 @@
-#include "libtfbsm/model.hpp"
 #include <gtest/gtest.h>
 
+#include "libtfbsm/model.hpp"
+
 TEST(ModelTest, SomeTest) {
-    static const int val = 1337;
+    static int const val = 1337;
 
     tfbsm::Model m{val};
 
