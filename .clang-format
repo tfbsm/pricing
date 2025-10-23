@@ -1,4 +1,13 @@
 ---
   BasedOnStyle: Google
   IndentWidth: '4'
+  ColumnLimit: 100
+  
+  DerivePointerAlignment: false
+  PointerAlignment: Left
+
+  QualifierAlignment: Right
+
   IncludeBlocks: Regroup
+
+  CommentPragmas: '(@copydoc|@copybrief|@see|@overload|@snippet)'
