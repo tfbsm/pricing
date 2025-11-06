@@ -1,7 +1,5 @@
 #include "libtfbsm/stable_distribution.hpp"
 
-#include <iostream>
-
 inline double tfbsm::StableDistribution::sampleValue() noexcept {
     double U, W, U_0, term1, term2;
 

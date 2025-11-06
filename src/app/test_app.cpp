@@ -11,7 +11,7 @@ typedef std::chrono::steady_clock clock_;
 int main(int argc, char const* argv[]) {
     tfbsm::StableDistribution sd{0.5, 1.0};
 
-    tfbsm::PricingEngine pe{.5, 1e-2, 100};
+    tfbsm::PricingEngine pe{.5, 1e-2};
 
     std::vector<double> values(1e5);
 

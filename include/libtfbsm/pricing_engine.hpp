@@ -5,11 +5,10 @@
 
 namespace tfbsm {
 
+// Time-Fractional Black-Scholes model pricing engine
 class PricingEngine {
    public:
-    PricingEngine(double alpha,
-                  double dtau,
-                  double T) noexcept
+    PricingEngine(double alpha, double dtau) noexcept
         : distribution(alpha, std::pow(dtau, 1. / alpha)) {};
 
     ~PricingEngine() = default;
@@ -18,10 +17,20 @@ class PricingEngine {
     PricingEngine(PricingEngine&&) = default;
     PricingEngine& operator=(PricingEngine&&) = default;
 
-    void calculate();
+    void setAlpha(double alpha);
+
+    [[nodiscard]] double estimateFairPrice(double T);
 
    private:
     StableDistribution distribution;
+
+    /**
+     * Simulates subordinator to the first crossing of level T
+     *
+     * @param T Time moment.
+     * @return Double $\tau$ -- first crossing of level T.
+     */
+    double sampleFirstCrossing(double T);
 };
 
 }  // namespace tfbsm
