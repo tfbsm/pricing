@@ -72,3 +72,8 @@ $$
 $$
 
 5.  The final option price **V** is the average of all these discounted payoffs across all `N` simulated paths.
+
+## Authors
+
+Andrei Gumirov (@gavt45), Mariia Tokareva (@tokmashadm)
+
