@@ -28,8 +28,8 @@ CPMAddPackage("gh:TheLartians/Format.cmake@1.8.2")
 
 file(GLOB_RECURSE libsources CONFIGURE_DEPENDS "${CMAKE_CURRENT_SOURCE_DIR}/src/libtfbsm/*.cpp")
 
-add_compile_options(-fsanitize=address)
-add_link_options(-fsanitize=address)
+add_compile_options(-fsanitize=address -Wall -Wpedantic)
+add_link_options(-fsanitize=address -Wall -Wpedantic)
 
 add_library(tfbsm SHARED ${libsources})
 target_include_directories(tfbsm PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/include)

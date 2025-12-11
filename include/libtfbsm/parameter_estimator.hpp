@@ -19,11 +19,11 @@ class ParameterEstimator {
     ParameterEstimator(ParameterEstimator&&) = default;
     ParameterEstimator& operator=(ParameterEstimator&&) = default;
 
-    void onPriceUpdate();
-    void estimate();
+    virtual void onPriceUpdate();
+    virtual void estimate();
 
-    [[nodiscard]] double getAlpha();
-    [[nodiscard]] double getSigma();
+    [[nodiscard]] virtual double getAlpha();
+    [[nodiscard]] virtual double getSigma();
 
    private:
 };
