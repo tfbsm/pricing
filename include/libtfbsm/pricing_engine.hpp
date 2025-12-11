@@ -2,14 +2,30 @@
 #define TFBSM_PRICING_ENGINE_H_
 
 #include "stable_distribution.hpp"
+#include "price_sink.hpp"
+#include "parameter_estimator.hpp"
 
 namespace tfbsm {
+
+struct OHLC {
+    time_t T;
+    double Open;
+    double High;
+    double Low;
+    double Close;
+};
 
 // Time-Fractional Black-Scholes model pricing engine
 class PricingEngine {
    public:
-    PricingEngine(double alpha, double dtau) noexcept
-        : distribution(alpha, std::pow(dtau, 1. / alpha)) {};
+    PricingEngine(
+        double alpha,
+        double dtau,
+        PriceSink&& priceSink,
+        ParameterEstimator&& parameterEstimator) noexcept
+        : distribution(alpha, std::pow(dtau, 1. / alpha)), 
+          priceSink(std::move(priceSink)),
+          parameterEstimator(std::move(parameterEstimator)) {};
 
     ~PricingEngine() = default;
     PricingEngine(PricingEngine const&) = default;
@@ -19,10 +35,15 @@ class PricingEngine {
 
     void setAlpha(double alpha);
 
+    void onTick(OHLC tick); // ???
+    void onTicks(const std::vector<OHLC> &ticks); // ???
+
     [[nodiscard]] double estimateFairPrice(double T);
 
    private:
     StableDistribution distribution;
+    PriceSink priceSink;
+    ParameterEstimator parameterEstimator;
 
     /**
      * Simulates subordinator to the first crossing of level T

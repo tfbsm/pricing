@@ -9,6 +9,13 @@ namespace tfbsm {
  */
 class ParameterEstimator {
    public:
+    struct Parameters
+    {
+      double alpha;
+      double sigma; 
+    };
+    
+
     ParameterEstimator();
 
     ~ParameterEstimator() = default;
@@ -19,11 +26,10 @@ class ParameterEstimator {
     ParameterEstimator(ParameterEstimator&&) = default;
     ParameterEstimator& operator=(ParameterEstimator&&) = default;
 
-    void onPriceUpdate();
-    void estimate();
+    virtual void onPriceUpdate();
+    virtual void estimate();
 
-    [[nodiscard]] double getAlpha();
-    [[nodiscard]] double getSigma();
+    [[nodiscard]] virtual Parameters getParameters();
 
    private:
 };
