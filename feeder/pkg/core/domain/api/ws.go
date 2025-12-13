@@ -21,7 +21,7 @@ type WSMessage[T any] struct {
 }
 
 type WSMessageObservation struct {
-	domain.Observation
+	*domain.Observation
 }
 
 func (m WSMessageObservation) WSMessage() WSMessage[WSMessageObservation] {

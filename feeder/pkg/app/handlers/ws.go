@@ -65,7 +65,7 @@ func (hg *WSHandlerGroup) Entrypoint(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	obsIter(func(observation domain.Observation) bool {
+	obsIter(func(observation *domain.Observation) bool {
 		err := conn.WriteJSON(api.WSMessageObservation{Observation: observation}.WSMessage())
 		if err != nil {
 			conn.WriteJSON(api.WSMessageError{Error: err}.WSMessage())

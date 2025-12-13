@@ -2,7 +2,9 @@ package main
 
 import (
 	"encoding/binary"
+	"flag"
 	"log"
+	"math/rand"
 	"time"
 
 	zmq "github.com/pebbe/zmq4"
@@ -10,6 +12,17 @@ import (
 )
 
 func main() {
+	var (
+		sendInterval time.Duration
+		sendJitter   time.Duration
+		jitter       int64
+	)
+
+	flag.DurationVar(&sendInterval, "interval", time.Second, "Interval between message sends")
+	flag.DurationVar(&sendJitter, "jitter", 500*time.Millisecond, "Jitter between message sends")
+
+	flag.Parse()
+
 	srv, err := zmq.NewSocket(zmq.PUB)
 	if err != nil {
 		log.Fatalln("Make socket: ", err.Error())
@@ -42,6 +55,11 @@ func main() {
 			log.Fatalln("Can't send bytes: ", err.Error())
 		}
 
-		time.Sleep(time.Millisecond)
+		if sendJitter != 0 {
+			// -jitter/2 to jitter/2
+			jitter = rand.Int63n(int64(sendJitter)) - int64(sendJitter)/2
+		}
+
+		time.Sleep(sendInterval + time.Duration(jitter))
 	}
 }

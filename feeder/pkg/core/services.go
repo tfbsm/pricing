@@ -10,11 +10,13 @@ import (
 type FeederService interface {
 	ProcessObservation(
 		ctx context.Context,
-		observation domain.Observation,
+		observation *domain.Observation,
 	) error
 
 	ObservationsStream(
 		ctx context.Context,
 		instrument string,
-	) (iter.Seq[domain.Observation], error)
+	) (iter.Seq[*domain.Observation], error)
+
+	Start(ctx context.Context) error
 }

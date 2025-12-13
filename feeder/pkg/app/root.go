@@ -73,7 +73,7 @@ func (s *sinkFeederApp) addZMQHandlers() {
 
 		// log.Infof("Message: %+v", dto.Observation())
 
-		if err := s.svc.ProcessObservation(ctx, obs); err != nil {
+		if err := s.svc.ProcessObservation(ctx, &obs); err != nil {
 			log.Info("Can't process observation: ", err.Error())
 
 			return
@@ -105,6 +105,10 @@ func (s *sinkFeederApp) Start(ctx context.Context) error {
 
 	grp.Go(func() error {
 		return s.client.Start(ctx)
+	})
+
+	grp.Go(func() error {
+		return s.svc.Start(ctx)
 	})
 
 	grp.Go(func() error {
