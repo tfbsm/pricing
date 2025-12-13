@@ -52,4 +52,4 @@ download:
 build-all: build-mac build-linux
 all: download doc test prebuild-all build-all
 run:
-	$(GOCMD) run ./cmd start
+	$(GOCMD) run ./cmd/feeder

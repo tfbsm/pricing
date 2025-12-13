@@ -12,10 +12,11 @@ import (
 	"syscall"
 	"time"
 
-	"github.com/prometheus/client_golang/prometheus/promhttp"
+	"github.com/go-chi/chi/v5"
 	"github.com/tfbsm/pricing/feeder/pkg/config"
 	"github.com/tfbsm/pricing/feeder/pkg/core"
 	"github.com/tfbsm/pricing/feeder/pkg/core/domain"
+	"github.com/tfbsm/pricing/feeder/pkg/core/feedersvc"
 	"github.com/tfbsm/pricing/feeder/pkg/infra/upstream"
 	"github.com/tfbsm/pricing/feeder/pkg/log"
 	"golang.org/x/sync/errgroup"
@@ -30,29 +31,34 @@ var _ App = (*sinkFeederApp)(nil)
 type sinkFeederApp struct {
 	cfg    *config.ServiceConfig
 	client upstream.Client
-	svc    *core.Service
+	svc    core.FeederService
+
+	router *chi.Mux
 }
 
 func New(cfg *config.ServiceConfig) (App, error) {
 	var err error
 
 	app := &sinkFeederApp{
-		cfg: cfg,
+		cfg:    cfg,
+		router: chi.NewRouter(),
 	}
 
-	app.svc = core.NewService()
+	app.svc = feedersvc.New()
 
 	app.client, err = upstream.NewZMQClient(&cfg.Upstream)
 	if err != nil {
 		return nil, fmt.Errorf("new zmq client: %w", err)
 	}
 
-	app.addHandlers()
+	app.addZMQHandlers()
+	app.initMiddleware()
+	app.initRoutes()
 
 	return app, nil
 }
 
-func (s *sinkFeederApp) addHandlers() {
+func (s *sinkFeederApp) addZMQHandlers() {
 	s.client.Subscribe(func(ctx context.Context, b []byte) {
 		var dto domain.ObservationDTO
 
@@ -108,11 +114,12 @@ func (s *sinkFeederApp) Start(ctx context.Context) error {
 			Addr:              net.JoinHostPort(s.cfg.Host, strconv.Itoa(s.cfg.Port)),
 			ReadTimeout:       10 * time.Second,
 			ReadHeaderTimeout: 10 * time.Second,
+			Handler:           s.router,
 		}
 
-		http.Handle("/metrics", promhttp.Handler())
-
 		go func() {
+			log.Info("Server is listening on ", srv.Addr)
+
 			if err := srv.ListenAndServe(); err != http.ErrServerClosed {
 				errs <- err
 			}

@@ -1,4 +1,4 @@
-package core
+package feedersvc
 
 import (
 	"context"
@@ -7,13 +7,7 @@ import (
 	"github.com/tfbsm/pricing/feeder/pkg/log"
 )
 
-type Service struct{}
-
-func NewService() *Service {
-	return &Service{}
-}
-
-func (s *Service) ProcessObservation(
+func (s *service) ProcessObservation(
 	ctx context.Context,
 	observation domain.Observation,
 ) error {
