@@ -10,6 +10,7 @@ import (
 
 	zmq "github.com/pebbe/zmq4"
 	"github.com/tfbsm/pricing/feeder/pkg/config"
+	"github.com/tfbsm/pricing/feeder/pkg/log"
 )
 
 var _ Client = (*zmqClient)(nil)
@@ -68,6 +69,8 @@ func (z *zmqClient) Connect(ctx context.Context) error {
 	if err := z.socket.SetSubscribe(""); err != nil {
 		return fmt.Errorf("zmq socket subscribe: %w", err)
 	}
+
+	log.Debug("Connecting to upstream ", z.cfg.Endpoint)
 
 	err := z.socket.Connect(z.cfg.Endpoint)
 	if err != nil {

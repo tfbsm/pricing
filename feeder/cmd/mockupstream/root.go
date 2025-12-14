@@ -13,6 +13,7 @@ import (
 
 func main() {
 	var (
+		listenHost   string
 		sendInterval time.Duration
 		sendJitter   time.Duration
 		jitter       int64
@@ -20,6 +21,7 @@ func main() {
 
 	flag.DurationVar(&sendInterval, "interval", time.Second, "Interval between message sends")
 	flag.DurationVar(&sendJitter, "jitter", 500*time.Millisecond, "Jitter between message sends")
+	flag.StringVar(&listenHost, "host", "tcp://*:5555", "ZeroMQ bind host")
 
 	flag.Parse()
 
@@ -28,7 +30,7 @@ func main() {
 		log.Fatalln("Make socket: ", err.Error())
 	}
 
-	if err := srv.Bind("tcp://*:5555"); err != nil {
+	if err := srv.Bind(listenHost); err != nil {
 		log.Fatalln("Bind server: ", err.Error())
 	}
 
