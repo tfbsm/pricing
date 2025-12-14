@@ -43,7 +43,8 @@ $ docker run --rm ghcr.io/tfbsm/pricing/feeder:latest /mockclient -n 1 -url ws:/
 
 ## Simple monitoring setup for local charting
 
-docker run -d --name tfbsm-prom -p 9090:9090 \
+```console
+$ docker run -d --name tfbsm-prom -p 9090:9090 \
   -v `pwd`/config/prometheus.yml:/etc/prometheus/prometheus.yml \
   prom/prometheus
-
+```
