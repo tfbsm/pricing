@@ -9,7 +9,7 @@ import (
 
 func (s *service) ObservationsStream(
 	ctx context.Context,
-	instrument string,
+	instrument domain.Instrument,
 ) (iter.Seq[*domain.Observation], error) {
 	return func(yield func(*domain.Observation) bool) {
 		mDownstreamClients.Inc()

@@ -10,7 +10,7 @@ PS. It was heavilly adopted from our previous project ([okx-exporter](https://gi
 
 ## Simple monitoring setup for local charting
 
-docker run --rm -p 9090:9090 \
+docker run -d --name tfbsm-prom -p 9090:9090 \
   -v `pwd`/config/prometheus.yml:/etc/prometheus/prometheus.yml \
   prom/prometheus
 

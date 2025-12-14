@@ -15,7 +15,7 @@ type FeederService interface {
 
 	ObservationsStream(
 		ctx context.Context,
-		instrument string,
+		instrument domain.Instrument,
 	) (iter.Seq[*domain.Observation], error)
 
 	Start(ctx context.Context) error
