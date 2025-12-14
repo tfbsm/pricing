@@ -53,3 +53,5 @@ build-all: build-mac build-linux
 all: download doc test prebuild-all build-all
 run:
 	$(GOCMD) run ./cmd/feeder
+docker:
+	cd .. && docker build -t ghcr.io/tfbsm/pricing/feeder:latest -f deploy/feeder.Dockerfile .

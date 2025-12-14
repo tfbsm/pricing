@@ -3,12 +3,12 @@ package main
 import (
 	"encoding/binary"
 	"flag"
-	"log"
 	"math/rand"
 	"time"
 
 	zmq "github.com/pebbe/zmq4"
 	"github.com/tfbsm/pricing/feeder/pkg/core/domain"
+	"github.com/tfbsm/pricing/feeder/pkg/log"
 )
 
 func main() {
@@ -27,21 +27,27 @@ func main() {
 
 	srv, err := zmq.NewSocket(zmq.PUB)
 	if err != nil {
-		log.Fatalln("Make socket: ", err.Error())
+		log.Error("Make socket: ", err.Error())
+
+		return
 	}
 
 	if err := srv.Bind(listenHost); err != nil {
-		log.Fatalln("Bind server: ", err.Error())
+		log.Error("Bind server: ", err.Error())
+
+		return
 	}
 
 	defer srv.Close()
+
+	log.Info("Upstream running on ", listenHost)
 
 	sendbuffer := make([]byte, 32)
 
 	for {
 		observation := domain.ObservationDTO{
 			InstrumentCode: 1234,
-			PredictedPrice: 1337,
+			PredictedPrice: rand.Uint64(),
 			PriceExponent:  2,
 			ProducedAt:     uint64(time.Now().UnixMilli()),
 			CRC32:          0,
@@ -49,12 +55,16 @@ func main() {
 
 		_, err := binary.Encode(sendbuffer, binary.BigEndian, observation)
 		if err != nil {
-			log.Fatalln("Can't encode observation: ", err.Error())
+			log.Error("Can't encode observation: ", err.Error())
+
+			return
 		}
 
 		_, err = srv.SendBytes(sendbuffer, 0)
 		if err != nil {
-			log.Fatalln("Can't send bytes: ", err.Error())
+			log.Error("Can't send bytes: ", err.Error())
+
+			return
 		}
 
 		if sendJitter != 0 {
