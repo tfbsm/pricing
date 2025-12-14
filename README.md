@@ -1,6 +1,15 @@
 # Time-fractional Black-Scholes model based option pricing
 
-## Classical Black–Scholes model: 
+### TFBSM parameter estimation strategies
+
+> [!NOTE]
+> Just some notes here for now
+
+1. $r$ – estimation is done outside of software
+2. $\sigma$ – regular Black-Scholes model is used to estimate it like implied volatility based on current price. (analytically + newton method)
+3. $\alpha$ – estimated based on $r$ and $\sigma$ using ?bayesian estimation? Maybe alpha is a function of $t, T$.
+
+## Classical Black–Scholes model:
 
 The price of a European option $V(t, x)$ is the solution of the boundary-value problem:
 
@@ -18,7 +27,7 @@ $$
 V_0 = e^{-rT}  \mathbb{E} \left[ f(S_T) \right],
 $$
 
-### Caputo fractional derivative: 
+### Caputo fractional derivative:
 
 For order $\alpha \in (0,1)$ Caputo fractional derivative is defined as:
 
@@ -28,7 +37,7 @@ $$
 
 ## Time-fractional Black–Scholes equation:
 
-The fractional analogue is the boundary-value problem: 
+The fractional analogue is the boundary-value problem:
 
 $$
 \frac{\partial^\alpha V}{\partial t^\alpha} + rS \frac{\partial V}{\partial S} + \frac{1}{2} \sigma^2 S^2 \frac{\partial^2 V}{\partial S^2} - rV = 0
@@ -39,7 +48,7 @@ $$
 - Boundary condition:
     $V(t, 0) = 0, \, V(t,x) \sim S - Ke^{-r(T-t)} \ \text{as} \ S \to \infty$
 
-  
+
 ### The Monte Carlo Solution:
 
 Using the similar idea with B-S there is an approach to calculate the theoretical price of option under the TFBSM:
@@ -52,7 +61,7 @@ $$
 1.  For each simulation `i`, generate a random operational time $E_T^{(i)}$ (the inverse α-stable subordinator). This random time introduces the "memory" and fat tails of the fractional model.
 
 2.  Use this random time to calculate the asset price at expiration `T` for that path:
-    
+
 $$
 S_T^{(i)} = S_0 \cdot \exp\left( (r - \frac{1}{2}\sigma^2) \cdot E_T^{(i)} + \sigma \sqrt{E_T^{(i)}} \cdot Z^{(i)} \right)
 $$
@@ -60,18 +69,27 @@ $$
 $\quad\quad$ where $Z^{(i)}$ is a random draw from a standard normal distribution.
 
 3.  For that path, compute the option's appropriate value at expiration:
-    
+
 $$
 \text{Payoff}^{(i)} = \max( S_T^{(i)} - K, 0 )
 $$
 
 4.  Discount this payoff back to present value using the random operational time:
-    
+
 $$
 \text{Discounted Payoff}^{(i)} = e^{-r \cdot E_T^{(i)}} \cdot \text{Payoff}^{(i)}
 $$
 
 5.  The final option price **V** is the average of all these discounted payoffs across all `N` simulated paths.
+
+## Build and run
+
+Build library and test apps
+
+```bash
+make clean build
+```
+
 
 ## Authors
 
