@@ -1,6 +1,8 @@
 #ifndef TFBSM_PARAMETER_ESTIMATOR_H_
 #define TFBSM_PARAMETER_ESTIMATOR_H_
 
+#include "models.hpp"
+
 namespace tfbsm {
 
 /**
@@ -24,7 +26,12 @@ class ParameterEstimator {
     ParameterEstimator(ParameterEstimator&&) = default;
     ParameterEstimator& operator=(ParameterEstimator&&) = default;
 
-    virtual void onPriceUpdate();
+    void onTick(Tick tick);                        // ???
+    void onTicks(std::vector<Tick> const& ticks);  // ???
+
+    void onKline(OHLC kline);
+    void onKlines(std::vector<OHLC> const& klines);
+
     virtual void estimate();
 
     [[nodiscard]] virtual Parameters getParameters();

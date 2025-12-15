@@ -1,4 +1,4 @@
-#include "libtfbsm/model.hpp"
+#include "libtfbsm/models.hpp"
 
 #include <concepts>
 #include <iostream>

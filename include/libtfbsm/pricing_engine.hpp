@@ -1,19 +1,12 @@
 #ifndef TFBSM_PRICING_ENGINE_H_
 #define TFBSM_PRICING_ENGINE_H_
 
+#include "models.hpp"
 #include "parameter_estimator.hpp"
 #include "price_sink.hpp"
 #include "stable_distribution.hpp"
 
 namespace tfbsm {
-
-struct OHLC {
-    time_t T;
-    double Open;
-    double High;
-    double Low;
-    double Close;
-};
 
 // Time-Fractional Black-Scholes model pricing engine
 class PricingEngine {
@@ -30,10 +23,11 @@ class PricingEngine {
     PricingEngine(PricingEngine&&) = default;
     PricingEngine& operator=(PricingEngine&&) = default;
 
-    void setAlpha(double alpha);
+    void onTick(Tick tick);                        // ???
+    void onTicks(std::vector<Tick> const& ticks);  // ???
 
-    void onTick(OHLC tick);                        // ???
-    void onTicks(std::vector<OHLC> const& ticks);  // ???
+    void onKline(OHLC kline);
+    void onKlines(std::vector<OHLC> const& klines);
 
     [[nodiscard]] double estimateFairPrice(double T);
 

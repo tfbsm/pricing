@@ -1,0 +1,51 @@
+#ifndef TFBSM_MODEL_HPP
+#define TFBSM_MODEL_HPP
+
+#include "stdint.h"
+#include "time.h"
+#include <string>
+
+namespace tfbsm {
+
+
+struct OHLC {
+    time_t ts;
+    uint32_t timescale_s;
+    double open, high, low, close, volume;
+};
+
+struct Tick {
+    enum Market {
+        Option,
+        Spot,
+    };
+
+    time_t ts;
+    std::string symbol;
+    Market market;
+    double bid, ask;
+};
+
+struct PriceEstimation {
+    time_t ts;
+    std::string spot_symbol;
+    std::string option_symbol;
+    double market_price;
+    double estimated_price;
+};
+
+class Model {
+   private:
+    /* data */
+    int test_field;
+
+   public:
+    Model(int test_arg = 123) : test_field(test_arg) {}
+
+    void do_something();
+    int getTestField() const noexcept { return test_field; }
+};
+
+}  // namespace tfbsm
+
+#endif  // TFBSM_MODEL_HPP
