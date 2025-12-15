@@ -46,11 +46,13 @@ func main() {
 
 	for {
 		observation := domain.ObservationDTO{
-			InstrumentCode: 1234,
-			PredictedPrice: rand.Uint64(),
-			PriceExponent:  2,
-			ProducedAt:     uint64(time.Now().UnixMilli()),
-			CRC32:          0,
+			OptionInstrumentCode: 1234,
+			SpotInstrumentCode:   1234,
+			PredictedPrice:       rand.Uint64(),
+			MarketPrice:          rand.Uint64(),
+			PriceExponent:        2,
+			ProducedAt:           uint64(time.Now().UnixMilli()),
+			CRC32:                0,
 		}
 
 		_, err := binary.Encode(sendbuffer, binary.BigEndian, observation)

@@ -1,12 +1,13 @@
 #ifndef TFBSM_MODEL_HPP
 #define TFBSM_MODEL_HPP
 
+#include <string>
+#include <vector>
+
 #include "stdint.h"
 #include "time.h"
-#include <string>
 
 namespace tfbsm {
-
 
 struct OHLC {
     time_t ts;
@@ -30,8 +31,8 @@ struct Tick {
 
 struct PriceEstimation {
     time_t ts;
-    std::string spot_symbol;
-    std::string option_symbol;
+    std::uint32_t spot_symbol_code;
+    std::uint32_t option_symbol_code;
     double market_price;
     double estimated_price;
 };

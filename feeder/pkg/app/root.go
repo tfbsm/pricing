@@ -64,20 +64,29 @@ func (s *sinkFeederApp) addZMQHandlers() {
 
 		_, err := binary.Decode(b, binary.BigEndian, &dto)
 		if err != nil {
-			log.Info("Can't decode observation: ", err.Error())
+			mUpstreamMessagesDiscarded.Inc()
 
 			return
 		}
 
-		obs := dto.Observation()
+		obs, err := dto.Observation(&s.cfg.InstrumentCodes)
+		if err != nil {
+			mUpstreamMessagesDiscarded.Inc()
+
+			return
+		}
 
 		// log.Infof("Message: %+v", dto.Observation())
 
 		if err := s.svc.ProcessObservation(ctx, &obs); err != nil {
+			mUpstreamMessageProcessingErrors.Inc()
+
 			log.Info("Can't process observation: ", err.Error())
 
 			return
 		}
+
+		mUpstreamMessagesProcessed.Inc()
 	})
 }
 

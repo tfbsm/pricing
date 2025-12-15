@@ -77,6 +77,9 @@ target_link_libraries(tfbsm PUBLIC cppzmq)
 add_executable(test_app src/app/test_app.cpp)
 target_link_libraries(test_app PRIVATE tfbsm)
 
+add_executable(test_feeder src/app/test_feeder.cpp)
+target_link_libraries(test_feeder PRIVATE tfbsm)
+
 # Tests
 
 include(CTest)

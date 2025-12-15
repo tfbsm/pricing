@@ -5,7 +5,10 @@
 
 namespace tfbsm {
 
-class PriceSink {};
+class PriceSink {
+   public:
+    virtual void onPriceEstimation(PriceEstimation const& estimation) = 0;
+};
 
 }  // namespace tfbsm
 
