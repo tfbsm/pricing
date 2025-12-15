@@ -1,0 +1,22 @@
+package core
+
+import (
+	"context"
+	"iter"
+
+	"github.com/tfbsm/pricing/feeder/pkg/core/domain"
+)
+
+type FeederService interface {
+	ProcessObservation(
+		ctx context.Context,
+		observation *domain.Observation,
+	) error
+
+	ObservationsStream(
+		ctx context.Context,
+		instrument domain.Instrument,
+	) (iter.Seq[*domain.Observation], error)
+
+	Start(ctx context.Context) error
+}
