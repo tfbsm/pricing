@@ -3,6 +3,12 @@ FROM debian:bookworm AS build
 RUN apt update && apt install -y build-essential clang cmake git \
     python3 clang-format cmake-format
 
+
+RUN git clone https://github.com/zeromq/libzmq.git && \
+    cd libzmq && mkdir build && cd build \
+    cmake .. && \
+    make -j4
+
 WORKDIR /build
 
 COPY ./.clang-format /build/

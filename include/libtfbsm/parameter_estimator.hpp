@@ -9,12 +9,10 @@ namespace tfbsm {
  */
 class ParameterEstimator {
    public:
-    struct Parameters
-    {
-      double alpha;
-      double sigma; 
+    struct Parameters {
+        double alpha;
+        double sigma;
     };
-    
 
     ParameterEstimator();
 

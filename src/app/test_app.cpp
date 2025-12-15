@@ -9,6 +9,8 @@ typedef std::chrono::steady_clock::time_point tp;
 typedef std::chrono::steady_clock clock_;
 
 int main(int argc, char const* argv[]) {
+    // Create ZeroMQ context
+    zmq::context_t context(1);
     // tfbsm::StableDistribution sd{0.5, 1.0};
 
     // tfbsm::PricingEngine pe{.5, 1e-2};
