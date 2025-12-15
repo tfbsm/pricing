@@ -3,14 +3,10 @@
 
 // todo
 
-namespace tfbs
-{
- 
-class TickCollector {
-    
-};
+namespace tfbs {
 
-} // namespace tfbs
+class TickCollector {};
 
+}  // namespace tfbs
 
 #endif
