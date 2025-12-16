@@ -1,6 +1,8 @@
 #ifndef TFBSM_CONFIGURATION_REPOSITORY_H_
 #define TFBSM_CONFIGURATION_REPOSITORY_H_
 
+#include "nlohmann/json.hpp"
+
 #include "libtfbsm/option.hpp"
 #include <memory>
 #include <mutex>
@@ -18,13 +20,27 @@ public:
     double get_dtau() const noexcept { return dtau_; }
     uint16_t get_buffer_size_for_estimation() const noexcept { return buffer_size_for_estimation_; }
     Option get_option(std::string symbol) const noexcept;
-    
+
+    void from_json(nlohmann::json const& j) {
+        j["dtau"].get_to(dtau_);
+        j["risk_free_rate"].get_to(risk_free_rate_);
+        j["buffer_size_for_estimation"].get_to(buffer_size_for_estimation_);
+
+        for (auto const &opt : j["options"]) {
+            Option option;
+            option.from_json(opt);
+
+            options_.insert({option.symbol, option});
+        }
+    }
+
 private:
     ConfigurationRepository() : risk_free_rate_(0.0), dtau_(1e-5), buffer_size_for_estimation_(10) {
     }
     double risk_free_rate_;
     double dtau_;
     uint16_t buffer_size_for_estimation_;
+    std::unordered_map<std::string, Option> options_;
 };
 
 }  // namespace tfbsm
