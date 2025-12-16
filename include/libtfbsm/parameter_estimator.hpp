@@ -2,6 +2,9 @@
 #define TFBSM_PARAMETER_ESTIMATOR_H_
 
 #include "models.hpp"
+#include "observers.hpp"
+
+#include <optional>
 
 namespace tfbsm {
 
@@ -9,7 +12,7 @@ namespace tfbsm {
  * Price movement based distribution parameter estimator
  * based on Bayesian problem statement.
  */
-class ParameterEstimator {
+class ParameterEstimator : public TickObserver, KlineObserver {
    public:
     struct Parameters
     {
@@ -17,25 +20,24 @@ class ParameterEstimator {
       double sigma; 
     };
 
-    ParameterEstimator();
+    ParameterEstimator() {};
 
     ~ParameterEstimator() = default;
 
     // Parameter estimator stores price data, so it should not be copied.
-    ParameterEstimator(ParameterEstimator const&) = delete;
-    ParameterEstimator& operator=(ParameterEstimator const&) = delete;
+    ParameterEstimator(ParameterEstimator const&) = default;
+    ParameterEstimator& operator=(ParameterEstimator const&) = default;
     ParameterEstimator(ParameterEstimator&&) = default;
     ParameterEstimator& operator=(ParameterEstimator&&) = default;
 
-    void onTick(Tick tick);                        // ???
-    void onTicks(std::vector<Tick> const& ticks);  // ???
-
-    void onKlines(std::vector<OHLC> const& klines);
+    void onTick(Tick const& tick) override;
+    void onTicks(std::vector<Tick> const& ticks) override;
+    void onKlines(std::vector<OHLC> const& klines) override;
 
 
     void estimate();
 
-    [[nodiscard]] Parameters get_parameters() const noexcept {return parameters_;}
+    [[nodiscard]] std::optional<Parameters> get_parameters() const noexcept {return parameters_;}
 
    private:
       Parameters parameters_;

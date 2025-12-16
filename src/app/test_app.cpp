@@ -1,16 +1,20 @@
 #include <chrono>
 #include <iostream>
 
+#include "spdlog/spdlog.h"
+
 #include "libtfbsm/models.hpp"
 #include "libtfbsm/pricing_engine.hpp"
 #include "libtfbsm/stable_distribution.hpp"
-#include "libtfbsm/option_dto.hpp"
+#include "libtfbsm/option.hpp"
 
 
 typedef std::chrono::steady_clock::time_point tp;
 typedef std::chrono::steady_clock clock_;
 
 int main(int argc, char const* argv[]) {
+    spdlog::set_level(spdlog::level::debug);
+
     // Create ZeroMQ context
     // zmq::context_t context(1);
     tfbsm::StableDistribution sd{0.5, 1.0};

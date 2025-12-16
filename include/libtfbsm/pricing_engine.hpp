@@ -10,34 +10,30 @@
 namespace tfbsm {
 
 // Time-Fractional Black-Scholes model pricing engine
-class PricingEngine {
+class PricingEngine : public TickObserver, public KlineObserver {
    public:
     PricingEngine(std::shared_ptr<PriceSink> priceSink,
                   std::unique_ptr<ParameterEstimator> parameterEstimator) noexcept 
-                  : parameterEstimator(std::move(parameterEstimator)), priceSink(std::move(priceSink)) {
-        distribution = StableDistribution(parameterEstimator->get_parameters().alpha,
-                       std::pow(tfbsm::ConfigurationRepository::getInstance().get_dtau(), 
-                                                    1. / parameterEstimator->get_parameters().alpha));
+                  : parameter_estimator_(std::move(parameterEstimator)), price_sink_(std::move(priceSink)) {
+        // distribution = StableDistribution(parameter_estimator_->get_parameters()->alpha,
+        //                std::pow(tfbsm::ConfigurationRepository::getInstance().get_dtau(), 
+        //                                             1. / parameter_estimator_->get_parameters()->alpha));
     };
 
     ~PricingEngine() = default;
-    PricingEngine(PricingEngine const&) = default;
-    PricingEngine& operator=(PricingEngine const&) = default;
-    PricingEngine(PricingEngine&&) = default;
-    PricingEngine& operator=(PricingEngine&&) = default;
+    PricingEngine(PricingEngine const&) = delete;
+    PricingEngine& operator=(PricingEngine const&) = delete;
+    PricingEngine(PricingEngine&&) = delete;
+    PricingEngine& operator=(PricingEngine&&) = delete;
 
-    void onTick(Tick tick);                        // ???
-    void onTicks(std::vector<Tick> const& ticks);  // ???
-
-    void onKline(OHLC kline);
-    void onKlines(std::vector<OHLC> const& klines);
-
-    [[nodiscard]] double estimateFairPrice();
+    void onTick(Tick const& tick) override;
+    void onTicks(std::vector<Tick> const& ticks) override;
+    void onKlines(std::vector<OHLC> const& klines) override;
 
    private:
     StableDistribution distribution;
-    std::shared_ptr<PriceSink> priceSink;
-    std::unique_ptr<ParameterEstimator> parameterEstimator;
+    std::shared_ptr<PriceSink> price_sink_;
+    std::unique_ptr<ParameterEstimator> parameter_estimator_;
 
     /**
      * Simulates subordinator to the first crossing of level T
