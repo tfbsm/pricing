@@ -11,13 +11,14 @@ namespace tfbsm {
 struct OHLC {
     time_t ts;
     uint32_t timescale_s;
+    std::string symbol;
     double open, high, low, close, volume;
 };
 
 struct Tick {
-    enum Market {
-        Option,
-        Spot,
+    enum class Market : std::uint8_t {
+        kOption,
+        kSpot,
     };
 
     time_t ts;
@@ -25,6 +26,7 @@ struct Tick {
     Market market;
     double bid, ask;
 };
+
 
 struct PriceEstimation {
     time_t ts;

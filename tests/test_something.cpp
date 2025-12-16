@@ -1,6 +1,6 @@
 #include <gtest/gtest.h>
 
-#include "libtfbsm/model.hpp"
+#include "libtfbsm/models.hpp"
 
 TEST(ModelTest, SomeTest) {
     static int const val = 1337;
