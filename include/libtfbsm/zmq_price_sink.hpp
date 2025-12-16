@@ -6,28 +6,27 @@
 
 namespace tfbsm {
 
-class ZeroMQPriceSink : PriceSink {
+class ZeroMQPriceSink : public PriceSink {
    public:
     ZeroMQPriceSink(std::string const& bind_address, zmq::context_t& ctx,
                     unsigned int const precision)
-        : ctx_(ctx),
-          sock_(ctx, zmq::socket_type::pub),
-          bind_address_(bind_address),
-          precision_(precision) {};
+        : 
+        precision_(precision),
+        bind_address_(bind_address),
+        sock_(ctx, zmq::socket_type::pub) {};
 
     ~ZeroMQPriceSink() = default;
     ZeroMQPriceSink(ZeroMQPriceSink const&) = delete;
     ZeroMQPriceSink& operator=(ZeroMQPriceSink const&) = delete;
-    ZeroMQPriceSink(ZeroMQPriceSink&&) = default;
-    ZeroMQPriceSink& operator=(ZeroMQPriceSink&&) = default;
+    ZeroMQPriceSink(ZeroMQPriceSink&&) = delete;
+    ZeroMQPriceSink& operator=(ZeroMQPriceSink&&) = delete;
 
     void run();
     void onPriceEstimation(PriceEstimation const& estimation) override;
 
    private:
     unsigned int const precision_;
-    std::string const& bind_address_;
-    zmq::context_t& ctx_;
+    std::string const bind_address_;
     zmq::socket_t sock_;
 };
 

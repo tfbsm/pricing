@@ -8,7 +8,7 @@ using json = nlohmann::json;
 void tfbsm::ZeroMQPriceSource::run() {
     zmq::message_t msg;
 
-    std::cerr << "ZeroMQ price source running" << std::endl;
+    spdlog::info("ZeroMQ price source running");
 
     while (true) {
         auto res = sock_.recv(msg, zmq::recv_flags::dontwait);
@@ -17,30 +17,59 @@ void tfbsm::ZeroMQPriceSource::run() {
         
         std::string msg_str = std::string(static_cast<char*>(msg.data()), msg.size());
 
-        std::cout << "Recv message: " << msg_str << std::endl;
+        spdlog::debug("Recv message: {}", msg_str);
 
-        tfbsm::Tick tick;
+        std::optional<tfbsm::Tick> tick;
+        std::optional<tfbsm::OHLC> kline;
 
         try {
             json data = json::parse(msg_str);
 
-            tick.ts = static_cast<int64_t>(data["ts"].get<double>());
-            tick.bid = data["bid"].get<double>();
-            tick.ask = data["ask"].get<double>();
-            tick.symbol = data["symbol"].get<std::string>();
-            tick.market = static_cast<tfbsm::Tick::Market>(data["market"].get<int>());
+            auto type = data["type"].get<std::string>();
+
+            if (type == "tick") {
+                tfbsm::Tick _tick;
+
+                _tick.ts = static_cast<int64_t>(data["ts"].get<double>());
+                _tick.bid = data["bid"].get<double>();
+                _tick.ask = data["ask"].get<double>();
+                _tick.symbol = data["symbol"].get<std::string>();
+                _tick.market = static_cast<tfbsm::Tick::Market>(data["market"].get<int>());
+
+                tick = std::move(_tick);
+
+                spdlog::debug("Recv tick: {} bid: {} ask: {}", tick.value().ts, tick.value().bid, tick.value().ask);
+            } else if (type == "kline") {
+                tfbsm::OHLC _kline;
+
+                _kline.ts = static_cast<int64_t>(data["ts"].get<double>());
+                _kline.symbol = data["symbol"].get<std::string>();
+                _kline.open = data["open"].get<double>();
+                _kline.high = data["high"].get<double>();
+                _kline.low = data["low"].get<double>();
+                _kline.close = data["close"].get<double>();
+                _kline.volume = data["volume"].get<double>();
+                _kline.timescale_s = data["timescale_s"].get<uint32_t>();
+
+                kline = std::move(_kline);
+            } else {
+                spdlog::warn("Unknown message type: {}", type);
+            }
         } catch (json::exception const& err) {
-            std::cerr << "message parse error " << err.what() << std::endl;
+            spdlog::warn("Incoming message parse error: {}", err.what());
             continue;
         }
-
-        std::cout << "recv tick: " << tick.ts << " bid: " << tick.bid << " ask: " << tick.ask << std::endl;
 
         {
             std::shared_lock<std::shared_mutex> lock(mtx_);
 
-            for (auto &tick_observer : tick_oververs_) 
-                tick_observer->onTick(tick);
+            if (tick.has_value())
+                for (auto &tick_observer : tick_oververs_) 
+                    tick_observer->onTick(tick.value());
+            
+            if (kline.has_value())
+                for (auto &kline_observer : kline_observers_)
+                    kline_observer->onKlines(std::vector<tfbsm::OHLC>{kline.value()});
         }
     }
 }

@@ -2,6 +2,7 @@
 #define TFBSM_ZMQ_PRICE_SOURCE_H_
 
 #include "zmq.hpp"
+#include "spdlog/spdlog.h"
 
 #include "models.hpp"
 #include "price_source.hpp"
@@ -14,14 +15,15 @@
 namespace tfbsm
 {
     
-class ZeroMQPriceSource : PriceSource {
+class ZeroMQPriceSource : public PriceSource {
 public:
     ZeroMQPriceSource(std::string const& address,
                       zmq::context_t& ctx,
                       zmq::socket_type socket_type = zmq::socket_type::sub) 
                       : ctx_(ctx),
                         sock_(ctx, socket_type) {
-        std::cerr << "ZeroMQ price source connecting to " << address << std::endl;
+        spdlog::debug("ZeroMQ price source connecting to {}", address);
+
         sock_.connect(address);
         sock_.setsockopt(ZMQ_SUBSCRIBE, "", 0); // subscribe to everything
         
@@ -36,8 +38,8 @@ public:
 
     ZeroMQPriceSource(ZeroMQPriceSource const&) = delete;
     ZeroMQPriceSource& operator=(ZeroMQPriceSource const&) = delete;
-    ZeroMQPriceSource(ZeroMQPriceSource&&) = default;
-    ZeroMQPriceSource& operator=(ZeroMQPriceSource &&) = default;
+    ZeroMQPriceSource(ZeroMQPriceSource&&) = delete;
+    ZeroMQPriceSource& operator=(ZeroMQPriceSource &&) = delete;
 
     void addTickObserver(TickObserver &obs) override {
         std::unique_lock<std::shared_mutex> guard(mtx_);

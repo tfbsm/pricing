@@ -8,7 +8,7 @@ namespace tfbsm
 
 class TickObserver {
 public:
-    virtual void onTick(Tick tick) = 0;
+    virtual void onTick(Tick const& tick) = 0;
     virtual void onTicks(std::vector<Tick> const& ticks) = 0;
 };
 

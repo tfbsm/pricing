@@ -2,6 +2,8 @@
 #include "libtfbsm/models.hpp"
 #include "libtfbsm/configuration_repository.hpp"
 
+#include "spdlog/spdlog.h"
+
 void tfbsm::ParameterEstimator::OptionsBufferIsFull() {
     if(options_buffer.size() >=  tfbsm::ConfigurationRepository::getInstance().get_buffer_size_for_estimation()){
         estimate();
@@ -9,7 +11,7 @@ void tfbsm::ParameterEstimator::OptionsBufferIsFull() {
     }
 }
 
-void tfbsm::ParameterEstimator::onTick(tfbsm::Tick tick){
+void tfbsm::ParameterEstimator::onTick(tfbsm::Tick const& tick){
     tfbsm::ParameterEstimator::options_buffer.push_back(
             std::pair<time_t, double>(tick.ts, (tick.bid + tick.ask)/2));
     OptionsBufferIsFull();
@@ -117,8 +119,12 @@ void tfbsm::ParameterEstimator::estimate(){
 
     parameters_.alpha = best_alpha;
     parameters_.sigma = best_sigma;
+
+    spdlog::debug("[ParameterEstimator] Estimated parameters: alpha: {} sigma: {}", best_alpha, best_sigma);
 }
 
 
-[[nodiscard]] tfbsm::ParameterEstimator::Parameters getParameters();
+[[nodiscard]] std::optional<tfbsm::ParameterEstimator::Parameters> getParameters() {
+    return std::nullopt;
+}
 

@@ -2,10 +2,15 @@
 
 #include <cstdint>
 #include <iostream>
+#include "spdlog/spdlog.h"
 
 #include "libtfbsm/protocol.hpp"
 
-void tfbsm::ZeroMQPriceSink::run() { sock_.bind(bind_address_); }
+void tfbsm::ZeroMQPriceSink::run() {
+    spdlog::info("Price sink listening on {}", bind_address_);
+
+    sock_.bind(bind_address_);
+}
 
 void tfbsm::ZeroMQPriceSink::onPriceEstimation(tfbsm::PriceEstimation const& estimation) {
     tfbsm::protocol::Messages::PriceEstimation estimationPacket{

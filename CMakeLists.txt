@@ -62,6 +62,35 @@ FetchContent_Declare(
 )
 FetchContent_MakeAvailable(json)
 
+# Logger
+FetchContent_Declare(
+    spdlog
+    GIT_REPOSITORY https://github.com/gabime/spdlog
+    SOURCE_DIR ${CMAKE_CURRENT_BINARY_DIR}/spdlog
+    GIT_TAG v1.16.0
+)
+FetchContent_MakeAvailable(spdlog)
+
+# Display traces on exceptions
+# set(BUILD_DWARFDUMP OFF)
+# set(LIBDWARF_STATIC TRUE)
+# FetchContent_Declare(
+#     libdwarf
+#     GIT_REPOSITORY https://github.com/jeremy-rifkin/libdwarf-lite.git
+#     GIT_TAG        5dfb2cd2aacf2bf473e5bfea79e41289f88b3a5f
+#     SOURCE_DIR ${CMAKE_CURRENT_BINARY_DIR}/libdwarf
+# )
+# FetchContent_MakeAvailable(libdwarf)
+
+# set(CPPTRACE_USE_EXTERNAL_LIBDWARF ON)
+# set(CMAKE_CXX_SCAN_FOR_MODULES OFF)
+# FetchContent_Declare(
+#     cpptrace
+#     GIT_REPOSITORY https://github.com/jeremy-rifkin/cpptrace.git
+#     GIT_TAG        v1.0.4
+# )
+# FetchContent_MakeAvailable(cpptrace)
+
 # Project structure
 file(GLOB_RECURSE libsources CONFIGURE_DEPENDS "${CMAKE_CURRENT_SOURCE_DIR}/src/libtfbsm/*.cpp")
 
@@ -76,9 +105,9 @@ endif()
 
 add_library(tfbsm STATIC ${libsources})
 target_include_directories(
-    tfbsm PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/include ${CMAKE_CURRENT_BINARY_DIR}/cppzmq
+    tfbsm PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/include ${CMAKE_CURRENT_BINARY_DIR}/cppzmq ${CMAKE_CURRENT_BINARY_DIR}/spdlog
 )
-target_link_libraries(tfbsm PUBLIC cppzmq nlohmann_json::nlohmann_json)
+target_link_libraries(tfbsm PUBLIC cppzmq nlohmann_json::nlohmann_json spdlog)
 
 add_executable(test_app src/app/test_app.cpp)
 target_link_libraries(test_app PRIVATE tfbsm)
