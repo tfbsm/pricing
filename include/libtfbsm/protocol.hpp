@@ -12,14 +12,30 @@
 namespace tfbsm
 {
 
-constexpr uint32_t to_be32(uint32_t v) {
+namespace protocol 
+{
+
+#if defined(__BYTE_ORDER__) && defined(__ORDER_LITTLE_ENDIAN__) && defined(__ORDER_BIG_ENDIAN__)
+
+constexpr bool is_little_endian =
+    (__BYTE_ORDER__ == __ORDER_LITTLE_ENDIAN__);
+
+#elif defined(_WIN32)
+// Windows is always little-endian
+constexpr bool is_little_endian = true;
+
+#else
+#error "Cannot determine endianness at compile time"
+#endif
+
+constexpr uint32_t bswap32(uint32_t v) {
     return ((v & 0x000000FFu) << 24) |
            ((v & 0x0000FF00u) << 8)  |
            ((v & 0x00FF0000u) >> 8)  |
            ((v & 0xFF000000u) >> 24);
 }
 
-constexpr uint64_t to_be64(uint64_t v) {
+constexpr uint64_t bswap64(uint64_t v) {
     return ((v & 0x00000000000000FFULL) << 56) |
            ((v & 0x000000000000FF00ULL) << 40) |
            ((v & 0x0000000000FF0000ULL) << 24) |
@@ -30,10 +46,23 @@ constexpr uint64_t to_be64(uint64_t v) {
            ((v & 0xFF00000000000000ULL) >> 56);
 }
 
-constexpr uint32_t from_be32(uint32_t v) { return to_be32(v); }
-constexpr uint64_t from_be64(uint64_t v) { return to_be64(v); }
+constexpr uint32_t to_be32(uint32_t v) {
+    return is_little_endian ? bswap32(v) : v;
+}
 
-class Protocol {
+constexpr uint64_t to_be64(uint64_t v) {
+    return is_little_endian ? bswap64(v) : v;
+}
+
+constexpr uint32_t from_be32(uint32_t v) {
+    return is_little_endian ? bswap32(v) : v;
+}
+
+constexpr uint64_t from_be64(uint64_t v) {
+    return is_little_endian ? bswap64(v) : v;
+}
+
+class Messages {
 public:
     #pragma pack(push, 1)
     struct PriceEstimation {
@@ -78,7 +107,7 @@ public:
 
         // FIXME: CRC32 may be incorrect here :(
         if (p.crc32 == 0) {
-            write32(xcrc32(buf.data(), sizeof(PriceEstimation) - sizeof(uint32_t), 0));
+            write32(crc32(buf.data(), sizeof(PriceEstimation) - sizeof(uint32_t)));
         } else {
             write32(p.crc32);
         }
@@ -118,6 +147,8 @@ public:
     }
     
 };
+
+} // namespace protocol
     
 } // namespace tfbsm
 

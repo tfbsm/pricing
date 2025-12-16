@@ -1,32 +1,30 @@
 #include "libtfbsm/zmq_price_sink.hpp"
 
-#include "libtfbsm/feeder_protocol.hpp"
-
-#include <iostream>
 #include <cstdint>
+#include <iostream>
 
-void tfbsm::ZeroMQPriceSink::run() {
-    sock_.bind(bind_address_);
-}
+#include "libtfbsm/protocol.hpp"
 
-void tfbsm::ZeroMQPriceSink::onPriceEstimation(const tfbsm::PriceEstimation& estimation) {
-    tfbsm::Protocol::PriceEstimation estimationPacket{
+void tfbsm::ZeroMQPriceSink::run() { sock_.bind(bind_address_); }
+
+void tfbsm::ZeroMQPriceSink::onPriceEstimation(tfbsm::PriceEstimation const& estimation) {
+    tfbsm::protocol::Messages::PriceEstimation estimationPacket{
         estimation.option_symbol_code,
         estimation.spot_symbol_code,
         precision_,
-        static_cast<uint64_t>(estimation.market_price*pow(10, precision_)),
-        static_cast<uint64_t>(estimation.estimated_price*pow(10, precision_)),
+        static_cast<uint64_t>(estimation.market_price * pow(10, precision_)),
+        static_cast<uint64_t>(estimation.estimated_price * pow(10, precision_)),
         static_cast<uint64_t>(estimation.ts),
         0,
     };
 
-    auto res = tfbsm::Protocol::serialize(estimationPacket);
+    auto res = tfbsm::protocol::Messages::serialize(estimationPacket);
 
-    std::cout << "\rsending packet ";
-    
-    for (const auto b : res) {
-        std::cout << std::hex << std::setfill('0') << std::setw(2) << (int) b;
-    }
+    // std::cout << "sending packet ";
+
+    // for (auto const b : res) {
+    //     std::cout << std::hex << std::setfill('0') << std::setw(2) << (int)b;
+    // }
 
     // std::cout << std::endl;
 

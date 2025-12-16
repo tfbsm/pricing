@@ -2,6 +2,7 @@
 #define TFBSM_PARAMETER_ESTIMATOR_H_
 
 #include "models.hpp"
+#include "observers.hpp"
 
 namespace tfbsm {
 
@@ -9,7 +10,7 @@ namespace tfbsm {
  * Price movement based distribution parameter estimator
  * based on Bayesian problem statement.
  */
-class ParameterEstimator {
+class ParameterEstimator : TickObserver, KlineObserver {
    public:
     struct Parameters
     {
@@ -27,8 +28,8 @@ class ParameterEstimator {
     ParameterEstimator(ParameterEstimator&&) = default;
     ParameterEstimator& operator=(ParameterEstimator&&) = default;
 
-    void onTick(Tick tick);                        // ???
-    void onTicks(std::vector<Tick> const& ticks);  // ???
+    void onTick(Tick tick) override;                        // ???
+    void onTicks(std::vector<Tick> const& ticks) override;  // ???
 
     void onKlines(std::vector<OHLC> const& klines);
 

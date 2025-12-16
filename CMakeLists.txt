@@ -56,6 +56,12 @@ if(NOT cppzmq_POPULATED)
     # add_subdirectory(${cppzmq_SOURCE_DIR} ${cppzmq_BINARY_DIR} EXCLUDE_FROM_ALL)
 endif()
 
+# JSON
+FetchContent_Declare(
+    json URL https://github.com/nlohmann/json/releases/download/v3.12.0/json.tar.xz
+)
+FetchContent_MakeAvailable(json)
+
 # Project structure
 file(GLOB_RECURSE libsources CONFIGURE_DEPENDS "${CMAKE_CURRENT_SOURCE_DIR}/src/libtfbsm/*.cpp")
 
@@ -72,7 +78,7 @@ add_library(tfbsm STATIC ${libsources})
 target_include_directories(
     tfbsm PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/include ${CMAKE_CURRENT_BINARY_DIR}/cppzmq
 )
-target_link_libraries(tfbsm PUBLIC cppzmq)
+target_link_libraries(tfbsm PUBLIC cppzmq nlohmann_json::nlohmann_json)
 
 add_executable(test_app src/app/test_app.cpp)
 target_link_libraries(test_app PRIVATE tfbsm)

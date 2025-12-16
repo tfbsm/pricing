@@ -10,7 +10,7 @@
 namespace tfbsm {
 
 // Time-Fractional Black-Scholes model pricing engine
-class PricingEngine {
+class PricingEngine : TickObserver, KlineObserver {
    public:
     PricingEngine(std::shared_ptr<PriceSink> priceSink,
                   std::unique_ptr<ParameterEstimator> parameterEstimator) noexcept 
@@ -26,11 +26,11 @@ class PricingEngine {
     PricingEngine(PricingEngine&&) = default;
     PricingEngine& operator=(PricingEngine&&) = default;
 
-    void onTick(Tick tick);                        // ???
-    void onTicks(std::vector<Tick> const& ticks);  // ???
+    void onTick(Tick tick) override;                        // ???
+    void onTicks(std::vector<Tick> const& ticks) override;  // ???
 
     void onKline(OHLC kline);
-    void onKlines(std::vector<OHLC> const& klines);
+    void onKlines(std::vector<OHLC> const& klines) override;
 
     [[nodiscard]] double estimateFairPrice();
 

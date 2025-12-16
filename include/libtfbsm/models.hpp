@@ -29,6 +29,14 @@ struct Tick {
 };
 
 
+// std::ostream& operator<<(std::ostream& os, Tick const& t) {
+//     os << "Tick(market=" << (t.market == Tick::Market::kOption ? "option" : "spot")
+//        << ", ts=" << t.ts << ", symbol=" << t.symbol << ", bid=" << t.bid << ", ask=" << t.ask
+//        << ")";
+
+//     return os;
+// }
+
 struct PriceEstimation {
     time_t ts;
     std::uint32_t spot_symbol_code;
