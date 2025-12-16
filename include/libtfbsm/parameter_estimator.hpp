@@ -11,9 +11,10 @@ namespace tfbsm {
  */
 class ParameterEstimator {
    public:
-    struct Parameters {
-        double alpha;
-        double sigma;
+    struct Parameters
+    {
+      double alpha;
+      double sigma; 
     };
 
     ParameterEstimator();
@@ -29,14 +30,17 @@ class ParameterEstimator {
     void onTick(Tick tick);                        // ???
     void onTicks(std::vector<Tick> const& ticks);  // ???
 
-    void onKline(OHLC kline);
     void onKlines(std::vector<OHLC> const& klines);
 
-    virtual void estimate();
 
-    [[nodiscard]] virtual Parameters getParameters();
+    void estimate();
+
+    [[nodiscard]] Parameters get_parameters() const noexcept {return parameters_;}
 
    private:
+      Parameters parameters_;
+      std::vector<std::pair<time_t, double>> options_buffer;
+      void OptionsBufferIsFull();
 };
 
 }  // namespace tfbsm

@@ -21,7 +21,7 @@ configure: prebuild
 format: configure
 	cmake --build $(build_path) --target fix-format
 
-build: configure format
+build: configure #format
 	cmake --build $(build_path) -- -j $(cores)
 
 test: build

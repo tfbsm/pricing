@@ -1,9 +1,11 @@
 #include <chrono>
 #include <iostream>
 
-#include "libtfbsm/model.hpp"
+#include "libtfbsm/models.hpp"
 #include "libtfbsm/pricing_engine.hpp"
 #include "libtfbsm/stable_distribution.hpp"
+#include "libtfbsm/option_dto.hpp"
+
 
 typedef std::chrono::steady_clock::time_point tp;
 typedef std::chrono::steady_clock clock_;
@@ -27,6 +29,8 @@ int main(int argc, char const* argv[]) {
 
     std::cout << std::chrono::duration_cast<std::chrono::milliseconds>(end - begin).count() / 1e3
               << std::endl;
+
+    auto type = tfbsm::Option::OptionType::kCall;
 
     return 0;
 }
