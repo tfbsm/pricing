@@ -100,6 +100,13 @@ make clean build
 To be done...
 
 
+## Results
+
+### Feeder
+
+We was able to achieve 1M messages per second throughput on single instance of feeder (M2 max 2023 macbook pro, 12 cores) `GOMAXPROCS=12`, number of concurrent websocket clients was 1000:
+![feeder throughput](./docs/feeder-throughput.png)
+
 ## Authors
 
 Andrei Gumirov (@gavt45), Mariia Tokareva (@tokmashadm)
