@@ -2,9 +2,6 @@
 
 ### TFBSM parameter estimation strategies
 
-> [!NOTE]
-> Just some notes here for now
-
 1. $r$ – estimation is done outside of software
 2. $\sigma$ – regular Black-Scholes model is used to estimate it like implied volatility based on current price. (analytically + newton method)
 3. $\alpha$ – estimated based on $r$ and $\sigma$ using ?bayesian estimation? Maybe alpha is a function of $t, T$.
@@ -82,6 +79,14 @@ $$
 
 5.  The final option price **V** is the average of all these discounted payoffs across all `N` simulated paths.
 
+## Architecture
+
+Top level architecture:
+![top level arch](./docs/tfbsm-arch.png)
+
+Component level architecture of pricing engine:
+![component level arch](./docs/tfbsm-component-level-arch.png)
+
 ## Build and run
 
 Build library and test apps
@@ -89,6 +94,10 @@ Build library and test apps
 ```bash
 make clean build
 ```
+
+## Running
+
+To be done...
 
 
 ## Authors
