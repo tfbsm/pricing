@@ -12,7 +12,7 @@
 namespace tfbsm {
 
 struct OHLC {
-    time_t ts;
+    std::chrono::system_clock::time_point ts;
     uint32_t timescale_s;
     std::string symbol;
     double open, high, low, close, volume;
@@ -24,7 +24,7 @@ struct Tick {
         kSpot,
     };
 
-    time_t ts;
+    std::chrono::system_clock::time_point ts;
     std::string symbol;
     Market market;
     double bid, ask;
@@ -40,7 +40,7 @@ struct Tick {
 // }
 
 struct PriceEstimation {
-    time_t ts;
+    std::chrono::system_clock::time_point ts;
     std::uint32_t spot_symbol_code;
     std::uint32_t option_symbol_code;
     double market_price;
@@ -75,6 +75,13 @@ public:
     // Option(OptionType type, double strike_price, time_t expiration_time_stamp)
     //         : type(type), strike_price(strike_price), expiration_time_stamp(expiration_time_stamp){};
 
+    double get_time_to_expiration() const noexcept {
+        return static_cast<double>(expiration_time_stamp - std::chrono::system_clock::to_time_t(std::chrono::system_clock::now()));
+    }
+
+    double get_time_to_expiration_h() const noexcept {
+        return get_time_to_expiration() / (60 * 60);
+    }
     
     void from_json(const nlohmann::json& j) {
         j.at("symbol").get_to(symbol);

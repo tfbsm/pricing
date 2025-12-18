@@ -5,47 +5,45 @@
 #include "spdlog/spdlog.h"
 
 void tfbsm::ParameterEstimator::OptionsBufferIsFull() {
-    if(options_buffer.size() >=  tfbsm::ConfigurationRepository::getInstance().get_buffer_size_for_estimation()){
+    if(options_buffer_.size() >=  tfbsm::ConfigurationRepository::getInstance().get_buffer_size_for_estimation()){
         estimate();
-        options_buffer.clear();
+        options_buffer_.clear();
     }
 }
 
 void tfbsm::ParameterEstimator::onTick(tfbsm::Tick const& tick){
-    tfbsm::ParameterEstimator::options_buffer.push_back(
-            std::pair<time_t, double>(tick.ts, (tick.bid + tick.ask)/2));
+    tfbsm::ParameterEstimator::options_buffer_.push_back({tick.ts, (tick.bid + tick.ask)/2});
     OptionsBufferIsFull();
 };
 
 void tfbsm::ParameterEstimator::onTicks(std::vector<Tick> const& ticks){
-    options_buffer.reserve(options_buffer.size() + ticks.size());
+    options_buffer_.reserve(options_buffer_.size() + ticks.size());
     
     std::transform(
         ticks.begin(), 
         ticks.end(), 
-        std::back_inserter(options_buffer),
+        std::back_inserter(options_buffer_),
         [](const Tick& tick) {
             return std::make_pair(tick.ts, (tick.bid + tick.ask) / 2.0);
         }
     );
+
     OptionsBufferIsFull();
 };
 
 void tfbsm::ParameterEstimator::onKlines(std::vector<OHLC> const& klines){
-    options_buffer.reserve(options_buffer.size() + klines.size());
+    options_buffer_.reserve(options_buffer_.size() + klines.size());
     
     std::transform(
         klines.begin(), 
         klines.end(), 
-        std::back_inserter(options_buffer),
+        std::back_inserter(options_buffer_),
         [](const OHLC& klines) {
             return std::make_pair(klines.ts, klines.close);
         }
     );
     OptionsBufferIsFull();
 };
-
-void onPriceUpdate();
 
 double CaputoL1Approximation(
     const std::vector<double>& v,
@@ -83,19 +81,19 @@ double LossFunction(
 }
 
 void tfbsm::ParameterEstimator::estimate(){
-    if (options_buffer.size() < 10)
+    if (options_buffer_.size() < tfbsm::ConfigurationRepository::getInstance().get_buffer_size_for_estimation())
         return;
 
-    std::sort(options_buffer.begin(), options_buffer.end(),
+    std::sort(options_buffer_.begin(), options_buffer_.end(),
               [](auto& a, auto& b){ return a.first < b.first; });
 
-    const std::size_t N = options_buffer.size();
+    const std::size_t N = options_buffer_.size();
 
     std::vector<double> t(N), v(N);
     for (std::size_t i = 0; i < N; ++i)
     {
-        t[i] = double(options_buffer[i].first);
-        v[i] = options_buffer[i].second;
+        t[i] = double(static_cast<long>(options_buffer_[i].first.time_since_epoch().count() * 1e-3));
+        v[i] = options_buffer_[i].second;
     }
 
     double best_alpha = 1.0;
@@ -117,6 +115,7 @@ void tfbsm::ParameterEstimator::estimate(){
         }
     }
 
+    has_parameters_ = true;
     parameters_.alpha = best_alpha;
     parameters_.sigma = best_sigma;
 
@@ -124,7 +123,10 @@ void tfbsm::ParameterEstimator::estimate(){
 }
 
 
-[[nodiscard]] std::optional<tfbsm::ParameterEstimator::Parameters> getParameters() {
-    return std::nullopt;
+[[nodiscard]] std::optional<tfbsm::ParameterEstimator::Parameters> tfbsm::ParameterEstimator::get_parameters() const noexcept {
+    if (!has_parameters_)
+        return std::nullopt;
+
+    return parameters_;
 }
 

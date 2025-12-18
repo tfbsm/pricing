@@ -37,11 +37,12 @@ class ParameterEstimator : public TickObserver, KlineObserver {
 
     void estimate();
 
-    [[nodiscard]] std::optional<Parameters> get_parameters() const noexcept {return parameters_;}
+    [[nodiscard]] std::optional<Parameters> get_parameters() const noexcept;
 
    private:
+      bool has_parameters_ = false;
       Parameters parameters_;
-      std::vector<std::pair<time_t, double>> options_buffer;
+      std::vector<std::pair<std::chrono::system_clock::time_point, double>> options_buffer_;
       void OptionsBufferIsFull();
 };
 

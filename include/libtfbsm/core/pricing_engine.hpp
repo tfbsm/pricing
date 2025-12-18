@@ -39,8 +39,12 @@ class PricingEngine : public TickObserver, public KlineObserver {
 
     std::unordered_map<std::string, double> spot_prices_;
 
-    void onEstimate(std::time_t ts,
+    void onTick(Tick const& tick, bool batch = false);
+
+    void sendEstimation(std::chrono::system_clock::time_point ts,
                     std::string const& symbol, 
+                    std::shared_ptr<tfbsm::Option> option_info,
+                    double spot_price,
                     double price);
 
     /**
@@ -49,7 +53,18 @@ class PricingEngine : public TickObserver, public KlineObserver {
      * @param T Time moment.
      * @return Double $\tau$ -- first crossing of level T.
      */
-    double sampleFirstCrossing(double T);
+    double estimate(
+        double spot_price,
+        std::shared_ptr<const tfbsm::Option> option,
+        tfbsm::ParameterEstimator::Parameters const& parameters
+    ) const;
+
+    double black_scholes_price(
+        double spot_price,
+        double sigma,
+        std::shared_ptr<const tfbsm::Option> option,
+        double r = tfbsm::ConfigurationRepository::getInstance().get_risk_free_rate()
+    ) const noexcept;
 };
 
 }  // namespace tfbsm
