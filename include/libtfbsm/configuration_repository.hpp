@@ -3,7 +3,7 @@
 
 #include "nlohmann/json.hpp"
 
-#include "libtfbsm/option.hpp"
+#include <libtfbsm/core/models.hpp>
 #include <memory>
 #include <mutex>
 
@@ -19,7 +19,13 @@ public:
     double get_risk_free_rate() const noexcept { return risk_free_rate_; }
     double get_dtau() const noexcept { return dtau_; }
     uint16_t get_buffer_size_for_estimation() const noexcept { return buffer_size_for_estimation_; }
-    Option get_option(std::string symbol) const noexcept;
+    
+    std::optional<Option> get_option(std::string const& symbol) const noexcept {
+        if (options_.find(symbol) == options_.end()) 
+            return std::nullopt;
+
+        return options_.at(symbol);
+    };
 
     void from_json(nlohmann::json const& j) {
         j["dtau"].get_to(dtau_);

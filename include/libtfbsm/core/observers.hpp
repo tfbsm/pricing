@@ -1,7 +1,7 @@
 #ifndef TFBSM_TICK_OBSERVERS_H_
 #define TFBSM_TICK_OBSERVERS_H_
 
-#include "models.hpp"
+#include <libtfbsm/core/models.hpp>
 
 namespace tfbsm
 {

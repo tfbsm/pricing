@@ -3,10 +3,9 @@
 
 #include "spdlog/spdlog.h"
 
-#include "libtfbsm/models.hpp"
-#include "libtfbsm/pricing_engine.hpp"
-#include "libtfbsm/stable_distribution.hpp"
-#include "libtfbsm/option.hpp"
+#include <libtfbsm/core/models.hpp>
+#include <libtfbsm/core/pricing_engine.hpp>
+#include <libtfbsm/core/stable_distribution.hpp>
 
 
 typedef std::chrono::steady_clock::time_point tp;

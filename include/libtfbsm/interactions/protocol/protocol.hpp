@@ -9,6 +9,8 @@
 #include <cstdint>
 #include <array>
 
+#include <libtfbsm/core/models.hpp>
+
 namespace tfbsm
 {
 

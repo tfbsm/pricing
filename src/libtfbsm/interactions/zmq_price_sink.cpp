@@ -1,10 +1,10 @@
-#include "libtfbsm/zmq_price_sink.hpp"
+#include <libtfbsm/interactions/zmq_price_sink.hpp>
 
 #include <cstdint>
 #include <iostream>
 #include "spdlog/spdlog.h"
 
-#include "libtfbsm/protocol.hpp"
+#include <libtfbsm/interactions/protocol/protocol.hpp>
 
 void tfbsm::ZeroMQPriceSink::run() {
     spdlog::info("Price sink listening on {}", bind_address_);

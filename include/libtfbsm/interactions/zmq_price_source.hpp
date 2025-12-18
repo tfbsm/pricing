@@ -4,8 +4,8 @@
 #include "zmq.hpp"
 #include "spdlog/spdlog.h"
 
-#include "models.hpp"
-#include "price_source.hpp"
+#include <libtfbsm/core/models.hpp>
+#include <libtfbsm/interactions/price_source.hpp>
 
 #include <shared_mutex>
 #include <unordered_set>

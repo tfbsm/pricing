@@ -1,8 +1,8 @@
 #ifndef TFBSM_PARAMETER_ESTIMATOR_H_
 #define TFBSM_PARAMETER_ESTIMATOR_H_
 
-#include "models.hpp"
-#include "observers.hpp"
+#include <libtfbsm/core/models.hpp>
+#include <libtfbsm/core/observers.hpp>
 
 #include <optional>
 

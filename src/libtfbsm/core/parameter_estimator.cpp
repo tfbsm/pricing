@@ -1,6 +1,6 @@
-#include "libtfbsm/parameter_estimator.hpp"
-#include "libtfbsm/models.hpp"
-#include "libtfbsm/configuration_repository.hpp"
+#include <libtfbsm/core/parameter_estimator.hpp>
+#include <libtfbsm/core/models.hpp>
+#include <libtfbsm/configuration_repository.hpp>
 
 #include "spdlog/spdlog.h"
 
