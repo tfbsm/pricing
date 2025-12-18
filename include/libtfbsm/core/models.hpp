@@ -64,6 +64,7 @@ public:
     enum class OptionType : std::uint8_t {kCall, kPut};
     OptionType type; 
     std::string symbol;
+    std::string spot_symbol;
 
     double strike_price;
 
@@ -71,12 +72,13 @@ public:
 
     Option() = default;
 
-    Option(OptionType type, double strike_price, time_t expiration_time_stamp)
-            : type(type), strike_price(strike_price), expiration_time_stamp(expiration_time_stamp){};
+    // Option(OptionType type, double strike_price, time_t expiration_time_stamp)
+    //         : type(type), strike_price(strike_price), expiration_time_stamp(expiration_time_stamp){};
 
     
     void from_json(const nlohmann::json& j) {
         j.at("symbol").get_to(symbol);
+        j.at("spot_symbol").get_to(spot_symbol);
         j.at("strike_price").get_to(strike_price);
         j.at("expiration").get_to(expiration_time_stamp);
 
@@ -93,6 +95,7 @@ public:
 
         j = nlohmann::json{
             {"symbol", symbol},
+            {"spot_symbol", spot_symbol},
             {"type", type_str},
             {"strike_price", strike_price},
             {"expiration", expiration_time_stamp}

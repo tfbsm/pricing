@@ -19,26 +19,12 @@ public:
     double get_risk_free_rate() const noexcept { return risk_free_rate_; }
     double get_dtau() const noexcept { return dtau_; }
     uint16_t get_buffer_size_for_estimation() const noexcept { return buffer_size_for_estimation_; }
-    
-    std::optional<Option> get_option(std::string const& symbol) const noexcept {
-        if (options_.find(symbol) == options_.end()) 
-            return std::nullopt;
 
-        return options_.at(symbol);
-    };
+    std::optional<std::shared_ptr<Option>> get_option_by_spot(std::string const& symbol) const noexcept;
+    std::optional<std::shared_ptr<Option>> get_option(std::string const& symbol) const noexcept;
+    std::optional<std::uint32_t> get_symbol_code(std::string const& symbol) const noexcept;
 
-    void from_json(nlohmann::json const& j) {
-        j["dtau"].get_to(dtau_);
-        j["risk_free_rate"].get_to(risk_free_rate_);
-        j["buffer_size_for_estimation"].get_to(buffer_size_for_estimation_);
-
-        for (auto const &opt : j["options"]) {
-            Option option;
-            option.from_json(opt);
-
-            options_.insert({option.symbol, option});
-        }
-    }
+    void from_json(nlohmann::json const& j);
 
 private:
     ConfigurationRepository() : risk_free_rate_(0.0), dtau_(1e-5), buffer_size_for_estimation_(10) {
@@ -46,7 +32,9 @@ private:
     double risk_free_rate_;
     double dtau_;
     uint16_t buffer_size_for_estimation_;
-    std::unordered_map<std::string, Option> options_;
+    std::unordered_map<std::string, std::shared_ptr<Option>> options_;
+    std::unordered_map<std::string, std::shared_ptr<Option>> spot_options_;
+    std::unordered_map<std::string, std::uint32_t> symbol_codes_;
 };
 
 }  // namespace tfbsm
