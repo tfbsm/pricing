@@ -3,6 +3,10 @@
 
 #include <cstdint>
 
+namespace tfbsm {
+
+namespace protocol {
+
 uint32_t crc32(uint8_t const* data, size_t length) noexcept {
     uint32_t crc = 0xFFFFFFFFu;
 
@@ -15,5 +19,9 @@ uint32_t crc32(uint8_t const* data, size_t length) noexcept {
 
     return crc ^ 0xFFFFFFFFu;
 }
+
+} // namespace protocol
+
+} // namespace tfbsm
 
 #endif

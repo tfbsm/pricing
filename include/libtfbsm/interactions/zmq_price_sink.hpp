@@ -1,8 +1,8 @@
 #ifndef TFBSM_ZMQ_PRICE_SINK_H_
 #define TFBSM_ZMQ_PRICE_SINK_H_
 
-#include "models.hpp"
-#include "price_sink.hpp"
+#include <libtfbsm/core/models.hpp>
+#include <libtfbsm/interactions/price_sink.hpp>
 
 namespace tfbsm {
 

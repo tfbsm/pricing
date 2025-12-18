@@ -1,11 +1,13 @@
 #ifndef TFBSM_PRICING_ENGINE_H_
 #define TFBSM_PRICING_ENGINE_H_
 
-#include "models.hpp"
-#include "parameter_estimator.hpp"
-#include "price_sink.hpp"
-#include "stable_distribution.hpp"
-#include "configuration_repository.hpp"
+#include <libtfbsm/core/models.hpp>
+#include <libtfbsm/core/parameter_estimator.hpp>
+#include <libtfbsm/core/stable_distribution.hpp>
+
+#include <libtfbsm/interactions/price_sink.hpp>
+
+#include <libtfbsm/configuration_repository.hpp>
 
 namespace tfbsm {
 

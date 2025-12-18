@@ -1,11 +1,11 @@
 #include <chrono>
 #include <iostream>
 
-#include "libtfbsm/models.hpp"
-#include "libtfbsm/parameter_estimator.hpp"
-#include "libtfbsm/pricing_engine.hpp"
-#include "libtfbsm/zmq_price_sink.hpp"
-#include "libtfbsm/zmq_price_source.hpp"
+#include <libtfbsm/core/models.hpp>
+#include <libtfbsm/core/parameter_estimator.hpp>
+#include <libtfbsm/core/pricing_engine.hpp>
+#include <libtfbsm/interactions/zmq_price_sink.hpp>
+#include <libtfbsm/interactions/zmq_price_source.hpp>
 
 typedef std::chrono::steady_clock::time_point tp;
 typedef std::chrono::steady_clock clock_;

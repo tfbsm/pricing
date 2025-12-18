@@ -2,7 +2,7 @@
 #define TFBSM_TICK_COLLECTOR_H_
 
 
-#include "observers.hpp"
+#include <libtfbsm/core/observers.hpp>
 
 namespace tfbsm {
 

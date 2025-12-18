@@ -3,6 +3,8 @@
 
 #include "zmq.hpp"
 
+#include <libtfbsm/core/models.hpp>
+
 namespace tfbsm {
 
 class PriceSink {
