@@ -112,8 +112,8 @@ target_link_libraries(tfbsm PUBLIC cppzmq nlohmann_json::nlohmann_json spdlog)
 add_executable(test_app src/app/test_app.cpp)
 target_link_libraries(test_app PRIVATE tfbsm)
 
-add_executable(test_feeder src/app/test_feeder.cpp)
-target_link_libraries(test_feeder PRIVATE tfbsm)
+add_executable(test_pricing_engine src/app/test_pricing_engine.cpp)
+target_link_libraries(test_pricing_engine PRIVATE tfbsm)
 
 # Tests
 

@@ -17,7 +17,7 @@ void tfbsm::ZeroMQPriceSource::run() {
         
         std::string msg_str = std::string(static_cast<char*>(msg.data()), msg.size());
 
-        spdlog::debug("Recv message: {}", msg_str);
+        // spdlog::debug("Recv message: {}", msg_str);
 
         std::optional<tfbsm::Tick> tick;
         std::optional<tfbsm::OHLC> kline;
@@ -30,19 +30,21 @@ void tfbsm::ZeroMQPriceSource::run() {
             if (type == "tick") {
                 tfbsm::Tick _tick;
 
-                _tick.ts = static_cast<int64_t>(data["ts"].get<double>());
+                std::chrono::system_clock::time_point tp{std::chrono::milliseconds{data["ts"].get<int64_t>()}};
+
+                _tick.ts = tp;
                 _tick.bid = data["bid"].get<double>();
                 _tick.ask = data["ask"].get<double>();
                 _tick.symbol = data["symbol"].get<std::string>();
                 _tick.market = static_cast<tfbsm::Tick::Market>(data["market"].get<int>());
 
                 tick = std::move(_tick);
-
-                spdlog::debug("Recv tick: {} bid: {} ask: {}", tick.value().ts, tick.value().bid, tick.value().ask);
             } else if (type == "kline") {
                 tfbsm::OHLC _kline;
 
-                _kline.ts = static_cast<int64_t>(data["ts"].get<double>());
+                std::chrono::system_clock::time_point tp{std::chrono::milliseconds{data["ts"].get<int64_t>()}};
+
+                _kline.ts = tp;
                 _kline.symbol = data["symbol"].get<std::string>();
                 _kline.open = data["open"].get<double>();
                 _kline.high = data["high"].get<double>();

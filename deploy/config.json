@@ -1,18 +1,18 @@
 {
     "dtau": 0.00005,
     "risk_free_rate": 0.1,
-    "buffer_size_for_estimation": 10,
+    "buffer_size_for_estimation": 100,
     "options": [
         {
-            "symbol": "BTC-26DEC25-86000-C",
-            "spot_symbol": "BTC",
-            "strike_price": 86000,
-            "expiration": 1766707200,
+            "symbol": "BTC-19DEC25-88500-C-USDT",
+            "spot_symbol": "BTCUSDT",
+            "strike_price": 88500,
+            "expiration": 1766102400,
             "type": "call"
         }
     ],
     "codes": {
-        "BTC": 1000,
-        "BTC-26DEC25-86000-C": 2001
+        "BTCUSDT": 1000,
+        "BTC-19DEC25-88500-C-USDT": 2001
     }
 }
