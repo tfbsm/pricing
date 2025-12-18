@@ -3,3 +3,7 @@ port: 8080
 
 upstream: 
   endpoint: tcp://127.0.0.1:5555
+instrument_codes:
+  "1000": "BTC"
+  "2001": "BTC-26DEC25-86000-C"
+  

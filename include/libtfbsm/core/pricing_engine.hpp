@@ -37,6 +37,12 @@ class PricingEngine : public TickObserver, public KlineObserver {
     std::shared_ptr<PriceSink> price_sink_;
     std::unique_ptr<ParameterEstimator> parameter_estimator_;
 
+    std::unordered_map<std::string, double> spot_prices_;
+
+    void onEstimate(std::time_t ts,
+                    std::string const& symbol, 
+                    double price);
+
     /**
      * Simulates subordinator to the first crossing of level T
      *

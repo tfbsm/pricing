@@ -12,6 +12,8 @@
 typedef std::chrono::steady_clock::time_point tp;
 typedef std::chrono::steady_clock clock_;
 
+using namespace std::chrono_literals; // required to use "1ms"
+
 int main(int argc, char const* argv[]) {
     spdlog::set_level(spdlog::level::debug);
 
@@ -45,11 +47,6 @@ int main(int argc, char const* argv[]) {
     source.addTickObserver(pricing_engine);
     source.addKlineObserver(pricing_engine);
 
-    while (true) {
-        tfbsm::PriceEstimation est{
-            time(0), 1337, 1337, 1.337 * rand(), 31.337 * rand(),
-        };
-
-        sink->onPriceEstimation(est);
-    }
+    while (true)
+        std::this_thread::sleep_for(1ms);
 }
