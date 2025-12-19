@@ -74,7 +74,7 @@ double tfbsm::PricingEngine::estimate(
         throw std::invalid_argument("Invalid alpha. Alpha must be in (0, 1).");
     }
 
-    if (std::abs(parameters.alpha - 1.0) < 1e-5) { //fixme
+    if (std::abs(parameters.alpha - 1.0) < 1e1) { //fixme
         return black_scholes_price(spot_price, parameters.sigma, option, r);
     }
     
@@ -134,7 +134,7 @@ double tfbsm::PricingEngine::black_scholes_price(
     std::shared_ptr<const tfbsm::Option> option,
     double r
 ) const noexcept {
-    auto T = option->get_time_to_expiration();
+    auto T = option->get_time_to_expiration() / (60 * 60 * 24 * 365);
 
     spdlog::debug("BS T: {}", T);
 

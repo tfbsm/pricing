@@ -5,4 +5,4 @@ upstream:
   endpoint: tcp://127.0.0.1:5555
 instrument_codes:
   "1000": "BTCUSDT"
-  "2001": "BTC-19DEC25-88500-C-USDT"
+  "2001": "BTC-9JAN26-87000-C-USDT"

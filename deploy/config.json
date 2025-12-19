@@ -4,15 +4,15 @@
     "buffer_size_for_estimation": 100,
     "options": [
         {
-            "symbol": "BTC-19DEC25-88500-C-USDT",
+            "symbol": "BTC-9JAN26-87000-C-USDT",
             "spot_symbol": "BTCUSDT",
-            "strike_price": 88500,
-            "expiration": 1766102400,
+            "strike_price": 87000,
+            "expiration": 1767916800,
             "type": "call"
         }
     ],
     "codes": {
         "BTCUSDT": 1000,
-        "BTC-19DEC25-88500-C-USDT": 2001
+        "BTC-9JAN26-87000-C-USDT": 2001
     }
 }

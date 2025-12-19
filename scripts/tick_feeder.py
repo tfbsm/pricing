@@ -23,7 +23,7 @@ class Market(enum.Enum):
 ctx = zmq.Context()
 s = ctx.socket(zmq.PUB)
 
-SYMBOL = "BTC-19DEC25-88500-C-USDT"
+SYMBOL = "BTC-9JAN26-87000-C-USDT"
 SPOT_SYMBOL = "BTCUSDT"
 
 LISTEN_ADDR = "tcp://*:5556"
